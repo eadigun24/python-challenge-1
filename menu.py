@@ -118,7 +118,7 @@ while place_order:
                     }
                     i += 1
             # 2. Ask customer to input menu item number
-            menu_selection = input("Please enter your selection from the menu above: ")
+            menu_selection = input("Please select a menu item number from the menu above: ")
 
             # 3. Check if the customer typed a number
             if menu_selection.isdigit():
@@ -128,7 +128,7 @@ while place_order:
                 # 4. Check if the menu selection is in the menu items
                 if menu_selection in menu_items.keys():
                     # Store the item name as a variable
-                    menu_selection_name = menu_items[menu_selection]
+                    menu_selection_name = menu_items[menu_selection]["Item name"]
 
                     # Ask the customer for the quantity of the menu item
                     item_quantity = input(f"How many {menu_selection_name} would you like to order? ")
@@ -137,7 +137,8 @@ while place_order:
                     if item_quantity.isdigit():                        
 
                     # Add the item name, price, and quantity to the order list
-                        order = [f"Item name: {menu_selection_name} , Price: {menu_items[menu_selection]}, Quantity: {item_quantity}"]
+                        menu_selection_price = menu_items[menu_selection]["Price"]
+                        order = {"Item name": menu_selection_name , "Price": menu_selection_price, "Quantity": item_quantity}
                         customer_order.append(order)
 
                     # Tell the customer that their input isn't valid
@@ -189,19 +190,26 @@ print("Item name                 | Price  | Quantity")
 print("--------------------------|--------|----------")
 
 # 6. Loop through the items in the customer's order
+for x in customer_order:
 
     # 7. Store the dictionary items as variables
-
+    item_name = x["Item name"]
+    price = x["Price"]
+    quantity = x["Quantity"]
 
     # 8. Calculate the number of spaces for formatted printing
-
+    num_spaces_for_item = 24 - len(item_name) + 1
+    num_spaces_for_price = 1 if price > 9.99 else 2   
 
     # 9. Create space strings
-
+    item_spaces = " " * num_spaces_for_item
+    price_spaces = " " * num_spaces_for_price
 
     # 10. Print the item name, price, and quantity
-
+    print(f"{item_name}{item_spaces} | ${price}{price_spaces}| {quantity}")
 
 # 11. Calculate the cost of the order using list comprehension
 # Multiply the price by quantity for each item in the order list, then sum()
 # and print the prices.
+order_total = sum([ dict['Price'] * float(dict['Quantity']) for dict in customer_order])
+print(f"The total price for you order is ${order_total}")
